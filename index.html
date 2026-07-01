@@ -177,34 +177,6 @@
 }
 .rw-pscore span { font-size: 12px; font-weight: 700; color: var(--ink); opacity: 0.6; }
 
-.rw-launch-row {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-.rw-chip {
-  font-family: 'Nunito', sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 4px 9px;
-  border-radius: 9px;
-  background: #eef2f7;
-  color: var(--ink);
-  opacity: 0.65;
-  white-space: nowrap;
-  border: 1.5px solid transparent;
-}
-.rw-chip.best {
-  background: linear-gradient(135deg, var(--flame), #ff9466);
-  color: var(--white);
-  opacity: 1;
-  box-shadow: 0 3px 8px rgba(255,107,53,0.4);
-  border-color: rgba(255,255,255,0.6);
-}
-.rw-chip.empty { background: transparent; opacity: 0.4; font-style: italic; }
-
 .rw-list {
   position: relative;
   z-index: 2;
@@ -214,26 +186,6 @@
   flex-direction: column;
   gap: 10px;
 }
-
-.rw-list-head {
-  display: none;
-  max-width: 700px;
-  margin: 20px auto 0;
-  padding: 0 18px;
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: rgba(255,255,255,0.75);
-  text-transform: uppercase;
-  position: relative; z-index: 2;
-  align-items: center;
-  gap: 14px;
-}
-.rw-list-head span:nth-child(1) { width: 30px; flex-shrink: 0; }
-.rw-list-head span:nth-child(2) { flex: 1; }
-.rw-list-head span:nth-child(3) { width: 190px; flex-shrink:0; }
-.rw-list-head span:nth-child(4) { width: 90px; flex-shrink:0; text-align:right; }
 
 .rw-row {
   background: rgba(255,255,255,0.95);
@@ -259,27 +211,19 @@
 }
 
 .rw-row-name { font-weight: 800; flex: 1; font-size: 14px; min-width: 90px; }
-.rw-row-launches { display: flex; gap: 6px; flex-wrap: wrap; }
 .rw-row-score { font-weight: 900; color: var(--flame); font-size: 14px; white-space: nowrap; margin-left: auto; }
 .rw-row-score small { color: var(--ink); opacity:0.5; font-weight:700; }
 
 .rw-row.rw-pending { opacity: 0.65; }
 .rw-row.rw-pending .rw-row-score { color: var(--ink); opacity: 0.5; font-size: 12px; }
 
-/* Desktop / laptop mode */
 @media (min-width: 720px) {
-  .rw-list-head { display: flex; }
   .rw-row { flex-wrap: nowrap; padding: 10px 18px; }
-  .rw-row-rank { width: 30px; }
   .rw-row-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rw-row-launches { width: 190px; flex-shrink: 0; }
-  .rw-row-score { width: 90px; text-align: right; }
 }
 
-/* Mobile mode */
 @media (max-width: 719px) {
   .rw-row-name { flex-basis: 100%; }
-  .rw-row-launches { flex-basis: 100%; order: 3; }
   .rw-row-score { order: 2; }
 }
 
@@ -310,123 +254,67 @@
   text-align: center;
   box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
-.rw-modal h3 {
-  font-family: 'Baloo 2', sans-serif;
-  margin: 6px 0 14px;
-  font-size: 18px;
-}
+.rw-modal h3 { font-family: 'Baloo 2', sans-serif; margin: 6px 0 14px; font-size: 18px; }
 .rw-modal input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 2px solid #dbe6f2;
-  font-size: 15px;
-  font-family: 'Nunito', sans-serif;
-  outline: none;
-  margin-bottom: 10px;
+  width: 100%; padding: 12px 14px; border-radius: 12px;
+  border: 2px solid #dbe6f2; font-size: 15px; font-family: 'Nunito', sans-serif;
+  outline: none; margin-bottom: 10px;
 }
 .rw-modal input:focus { border-color: var(--sky-mid); }
 .rw-modal-error { color: #E4572E; font-size: 12px; font-weight: 700; min-height: 16px; margin-bottom: 6px; }
 .rw-modal-btns { display: flex; gap: 8px; margin-top: 6px; }
+
 .rw-btn {
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  padding: 11px 16px;
-  cursor: pointer;
-  font-size: 14px;
-  flex: 1;
-  transition: transform 0.12s ease;
+  font-family: 'Baloo 2', sans-serif; font-weight: 700; border: none;
+  border-radius: 12px; padding: 11px 16px; cursor: pointer; font-size: 14px;
+  flex: 1; transition: transform 0.12s ease;
 }
 .rw-btn:hover { transform: translateY(-1px); }
 .rw-btn.primary { background: var(--sky-mid); color: var(--white); }
 .rw-btn.ghost { background: #eef2f7; color: var(--ink); }
-.rw-btn.danger { background: #FDE8E4; color: #C6401F; }
-.rw-btn.grow { background: var(--grass); color: var(--white); }
 
 /* Admin panel */
 .rw-admin {
-  position: relative; z-index: 2;
-  max-width: 640px;
-  margin: 26px auto 0;
-  background: rgba(255,255,255,0.97);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: var(--card-shadow);
+  position: relative; z-index: 2; max-width: 640px; margin: 26px auto 0;
+  background: rgba(255,255,255,0.97); border-radius: 20px; padding: 20px; box-shadow: var(--card-shadow);
 }
-.rw-admin h3 {
-  font-family: 'Baloo 2', sans-serif;
-  margin: 0 0 4px;
-  font-size: 17px;
-}
+.rw-admin h3 { font-family: 'Baloo 2', sans-serif; margin: 0 0 4px; font-size: 17px; }
 .rw-admin p.rw-sub { margin: 0 0 16px; font-size: 12px; opacity: 0.6; font-weight: 700; }
 
-.rw-add-form {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
-}
+.rw-add-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
 .rw-add-form input {
-  flex: 1; min-width: 140px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 2px solid #dbe6f2;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  outline: none;
+  flex: 1; min-width: 140px; padding: 10px 12px; border-radius: 10px;
+  border: 2px solid #dbe6f2; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px; outline: none;
 }
 .rw-add-form input:focus { border-color: var(--sky-mid); }
 .rw-add-form button {
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  background: var(--flame);
-  color: var(--white);
-  border: none;
-  border-radius: 10px;
-  padding: 10px 18px;
-  cursor: pointer;
-  font-size: 14px;
+  font-family: 'Baloo 2', sans-serif; font-weight: 700; background: var(--flame);
+  color: var(--white); border: none; border-radius: 10px; padding: 10px 18px; cursor: pointer; font-size: 14px;
 }
 
 .rw-admin-row {
-  display: flex; align-items: center; gap: 8px;
-  flex-wrap: wrap;
-  padding: 10px 0;
-  border-top: 1px dashed #e0e8f0;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 0; border-top: 1px dashed #e0e8f0;
 }
 .rw-admin-row:first-of-type { border-top: none; }
 .rw-admin-row .rw-a-name { font-weight: 800; font-size: 13.5px; flex: 1; min-width: 110px; }
 .rw-admin-row .rw-a-field { display: flex; align-items: center; gap: 4px; }
 .rw-admin-row .rw-a-field label { font-size: 10px; font-weight: 800; opacity: 0.5; }
 .rw-admin-row input[type="number"] {
-  width: 74px;
-  padding: 7px 8px;
-  border-radius: 8px;
-  border: 2px solid #dbe6f2;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 13px;
-  outline: none;
+  width: 74px; padding: 7px 8px; border-radius: 8px; border: 2px solid #dbe6f2;
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; outline: none;
 }
 .rw-admin-row input[type="number"]:focus { border-color: var(--sky-mid); }
 .rw-a-btns { display: flex; gap: 6px; }
 .rw-a-btns button {
-  border: none; border-radius: 8px; padding: 7px 10px;
-  font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer;
+  border: none; border-radius: 8px; padding: 7px 10px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer;
 }
 .rw-a-save { background: var(--grass); color: white; }
 .rw-a-del { background: #FDE8E4; color: #C6401F; }
 
 .rw-toast {
-  position: fixed;
-  bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--ink); color: white;
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700; font-size: 13px;
-  padding: 12px 20px; border-radius: 30px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  opacity: 0; transition: all 0.3s ease;
-  z-index: 60; pointer-events: none;
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: white; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 13px;
+  padding: 12px 20px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); opacity: 0; transition: all 0.3s ease; z-index: 60; pointer-events: none;
 }
 .rw-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -489,12 +377,31 @@
 
 <div class="rw-toast" id="rwToast"></div>
 
+<!-- Import SDK Firebase Kuno agar langsung berjalan lewat Script Tag HTML sederhana -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script>
 (function(){
-  const STORAGE_KEY = 'roket-air-teams';
   const ADMIN_PASSWORD = 'labiaba';
   let teams = [];
   let isAdmin = false;
+
+  // ⚠️ ATUR DATABASE KAMU DI SINI:
+  // Kamu hanya perlu mendaftar ke firebase console (gratis), buat project, lalu salin config-nya ke sini.
+  const firebaseConfig = {
+    apiKey: "CONTOH_API_KEY_KAMU",
+    authDomain: "roket-air-project.firebaseapp.com",
+    databaseURL: "https://roket-air-project-default-rtdb.firebaseio.com", // ganti dengan URL database-mu
+    projectId: "roket-air-project",
+    storageBucket: "roket-air-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:1234:web:abcd"
+  };
+  
+  // Inisialisasi Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database().ref('roket_teams');
 
   const el = (id) => document.getElementById(id);
 
@@ -528,39 +435,18 @@
     </svg>`;
   }
 
-  // Helper pengaman parsing data agar sinkronisasi antar device berjalan mulus
-  function parseTeamsData(res) {
-    if (!res) return [];
-    if (Array.isArray(res)) return res;
-    if (res.value) {
-      if (Array.isArray(res.value)) return res.value;
-      if (typeof res.value === 'string') {
-        try { return JSON.parse(res.value); } catch(e) { return []; }
-      }
-    }
-    if (typeof res === 'string') {
-      try { return JSON.parse(res); } catch(e) { return []; }
-    }
-    return [];
-  }
-
-  async function loadTeams(){
-    try {
-      const res = await window.storage.get(STORAGE_KEY, true);
-      teams = parseTeamsData(res);
-    } catch(e) {
-      teams = [];
+  // MENDENGARKAN REALTIME UPDATE DARI DATABASE ONLINE (SINKRON SEKETIKA!)
+  db.on('value', (snapshot) => {
+    const data = snapshot.val();
+    teams = [];
+    if (data) {
+      // Mengubah format objek Firebase menjadi array biasa
+      Object.keys(data).forEach(id => {
+        teams.push({ id, ...data[id] });
+      });
     }
     render();
-  }
-
-  async function saveTeams(){
-    try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(teams), true);
-    } catch(e) {
-      toast('⚠️ Gagal menyimpan data');
-    }
-  }
+  });
 
   function getRanked(){
     const withScore = teams
@@ -651,6 +537,7 @@
     panel.style.display = 'block';
     const listEl = el('rwAdminList');
     listEl.innerHTML = '';
+    
     teams.forEach((t) => {
       const row = document.createElement('div');
       row.className = 'rw-admin-row';
@@ -673,31 +560,34 @@
     });
 
     listEl.querySelectorAll('.rw-a-save').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', () => {
         const id = btn.dataset.id;
         const l1 = listEl.querySelector(`input[data-id="${id}"][data-field="launch1"]`).value;
         const l2 = listEl.querySelector(`input[data-id="${id}"][data-field="launch2"]`).value;
-        const team = teams.find(x => x.id === id);
-        if (team) {
-          team.launch1 = l1 === '' ? null : parseFloat(l1);
-          team.launch2 = l2 === '' ? null : parseFloat(l2);
-          await saveTeams();
-          render();
-          toast('✅ Skor tersimpan!');
-        }
+        
+        // Simpan langsung ke server Firebase
+        db.child(id).update({
+          launch1: l1 === '' ? null : parseFloat(l1),
+          launch2: l2 === '' ? null : parseFloat(l2)
+        }).then(() => {
+          toast('✅ Skor berhasil di-update ke Cloud!');
+        }).catch(() => {
+          toast('⚠️ Gagal mengirim ke database online');
+        });
       });
     });
 
     listEl.querySelectorAll('.rw-a-del').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', () => {
         const id = btn.dataset.id;
         const team = teams.find(x => x.id === id);
         if (!team) return;
         if (!confirm(`Hapus tim "${team.name}"?`)) return;
-        teams = teams.filter(x => x.id !== id);
-        await saveTeams();
-        render();
-        toast('🗑️ Tim dihapus');
+        
+        // Hapus dari Firebase
+        db.child(id).remove().then(() => {
+          toast('🗑️ Tim dihapus dari cloud');
+        });
       });
     });
   }
@@ -706,7 +596,7 @@
     if (isAdmin) {
       isAdmin = false;
       el('rwLoginBtn').textContent = '🔐 Login Panitia';
-      el('rwLoginBtnBtn').classList.remove('active');
+      el('rwLoginBtn').classList.remove('active');
       render();
       toast('👋 Keluar dari mode panitia');
       return;
@@ -729,7 +619,7 @@
       el('rwLoginBtn').textContent = '✅ Panitia Aktif';
       el('rwLoginBtn').classList.add('active');
       render();
-      toast('🚀 Login berhasil, selamat bertugas!');
+      toast('🚀 Mode admin aktif!');
     } else {
       el('rwPassError').textContent = 'Password salah, coba lagi.';
     }
@@ -739,30 +629,21 @@
   el('rwPassInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
   el('rwOverlay').addEventListener('click', (e) => { if (e.target.id === 'rwOverlay') el('rwOverlay').classList.remove('open'); });
 
-  el('rwAddBtn').addEventListener('click', async () => {
+  el('rwAddBtn').addEventListener('click', () => {
     const nameInput = el('rwNewName');
     const name = nameInput.value.trim();
     if (!name) { toast('⚠️ Nama tim tidak boleh kosong'); return; }
-    teams.push({ id: 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7), name, launch1: null, launch2: null });
-    nameInput.value = '';
-    await saveTeams();
-    render();
-    toast('🎉 Tim baru ditambahkan!');
+    
+    // Push data tim baru langsung ke Firebase Cloud
+    db.push({
+      name: name,
+      launch1: null,
+      launch2: null
+    }).then(() => {
+      nameInput.value = '';
+      toast('🎉 Tim baru berhasil disimpan online!');
+    });
   });
 
-  // Sistem background-poll yang dipercepat agar data terasa instan/real-time bagi penonton
-  setInterval(async () => {
-    if (isAdmin) return; 
-    try {
-      const res = await window.storage.get(STORAGE_KEY, true);
-      const fresh = parseTeamsData(res);
-      if (JSON.stringify(fresh) !== JSON.stringify(teams)) {
-        teams = fresh;
-        render();
-      }
-    } catch(e) {}
-  }, 2000); // Waktu dipercepat dari 6 detik menjadi 2 detik
-
-  loadTeams();
 })();
 </script>

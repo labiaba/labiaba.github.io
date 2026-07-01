@@ -203,13 +203,16 @@
     gap: 10px;
   }
 
-  /* Baris List Leaderboard Presisi */
+  /* Baris List Leaderboard (DIKUNCI AGAR WAJIB LURUS SEJAJAR) */
   .rw-row {
     background: rgba(255,255,255,0.95);
     border-radius: 14px;
     padding: 12px 16px;
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     box-shadow: 0 4px 14px rgba(11,37,69,0.15);
   }
 
@@ -221,15 +224,17 @@
     background: var(--sky-mid);
     width: 30px; height: 30px;
     border-radius: 50%;
-    display: flex; align-items:center; justify-content:center;
-    flex-shrink: 0;
+    display: flex !important; align-items:center !important; justify-content:center !important;
+    flex-shrink: 0 !important;
     margin-right: 12px;
   }
 
   .rw-row-name-container { 
-    flex: 1; 
-    min-width: 0; 
+    flex: 1 !important; 
+    min-width: 0 !important; 
     margin-right: 12px;
+    display: flex;
+    flex-direction: column;
   }
   .rw-row-name { 
     font-weight: 800; 
@@ -254,8 +259,8 @@
     font-weight: 900; 
     color: var(--flame); 
     font-size: 16px; 
-    white-space: nowrap; 
-    flex-shrink: 0;
+    white-space: nowrap !important; 
+    flex-shrink: 0 !important;
     text-align: right;
   }
   .rw-row-score small { color: var(--ink); opacity:0.5; font-weight:700; font-size: 12px; }
@@ -414,13 +419,13 @@
 
   /* ==========================================================================
      MEDIA QUERIES - RESPONSIVE DI HP (MAKSIMAL 640PX)
-     ========================================================================== */
+     ========================================================================= */
   @media (max-width: 640px) {
     .rw-root { padding: 16px 12px 30px; }
     .rw-title h1 { font-size: 26px; }
     .rw-title p { font-size: 10px; }
 
-    /* Susunan Podium Vertikal Berurutan Logis (1, 2, 3) di Layar Kecil */
+    /* Susunan Podium Vertikal di Layar HP */
     .rw-podium {
       flex-direction: column;
       align-items: center;
@@ -436,12 +441,12 @@
     .rw-pcard.silver { order: 2; }
     .rw-pcard.bronze { order: 3; }
 
-    /* Supaya baris list tetap sebaris rapi (tidak bertumpuk atas-bawah) */
+    /* Batasi lebar teks nama di HP agar muat & otomatis berganti jadi titik-titik jika terlalu panjang */
     .rw-row-name, .rw-row-school {
-      max-width: 160px; /* Batasi lebar teks agar tidak menabrak nilai skor */
+      max-width: 150px !important;
     }
     .rw-row-score {
-      font-size: 14px;
+      font-size: 14px !important;
     }
 
     /* Penyesuaian Panel Admin di HP */
@@ -459,7 +464,7 @@
 
   @media (max-width: 380px) {
     .rw-row-name, .rw-row-school {
-      max-width: 120px;
+      max-width: 110px !important;
     }
   }
   </style>

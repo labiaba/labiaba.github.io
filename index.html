@@ -21,7 +21,7 @@
   overflow-x: hidden;
   border-radius: 24px;
   background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-bottom) 100%);
-  padding: 28px 20px 40px;
+  padding: 28px 20px 60px; /* Ditambah ruang bawah untuk watermark */
   box-sizing: border-box;
 }
 
@@ -56,32 +56,35 @@
 
 .rw-title-wrap { display:flex; align-items:center; gap:14px; }
 
-.rw-rocket-badge {
-  width: 58px; height: 58px;
-  display:flex; align-items:center; justify-content:center;
-  font-size: 30px;
+.rw-logo-badge {
+  width: 64px; height: 64px;
+  object-fit: contain;
   background: var(--white);
   border-radius: 18px;
+  padding: 4px;
   box-shadow: var(--card-shadow);
   animation: rw-bob 3s ease-in-out infinite;
   flex-shrink: 0;
 }
-@keyframes rw-bob { 0%,100%{transform: translateY(0) rotate(-4deg)} 50%{transform: translateY(-8px) rotate(4deg)} }
+@keyframes rw-bob { 0%,100%{transform: translateY(0) rotate(-2deg)} 50%{transform: translateY(-6px) rotate(2deg)} }
 
 .rw-title h1 {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 800;
-  font-size: 28px;
+  font-size: 32px;
   margin: 0;
   color: var(--white);
   text-shadow: 0 3px 0 rgba(11,37,69,0.35);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
 }
 .rw-title p {
-  margin: 4px 0 0;
-  color: rgba(255,255,255,0.92);
-  font-weight: 700;
-  font-size: 13px;
+  margin: 2px 0 0;
+  color: rgba(255,255,255,0.95);
+  font-weight: 800;
+  font-size: 11.5px; /* Disesuaikan agar panjang visualnya seimbang dengan judul utama */
+  letter-spacing: -0.1px;
+  text-transform: uppercase;
 }
 
 .rw-login-btn {
@@ -130,7 +133,7 @@
   background: var(--white);
   border-radius: 20px;
   padding: 16px 14px 18px;
-  width: 168px;
+  width: 175px;
   text-align: center;
   box-shadow: var(--card-shadow);
   position: relative;
@@ -166,7 +169,15 @@
   font-family: 'Baloo 2', sans-serif;
   font-weight: 700;
   font-size: 15px;
-  margin: 4px 0 2px;
+  margin: 4px 0 0px;
+  word-break: break-word;
+  line-height: 1.2;
+}
+.rw-pschool {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 600;
+  margin-bottom: 6px;
   word-break: break-word;
 }
 .rw-pscore {
@@ -210,21 +221,20 @@
   flex-shrink: 0;
 }
 
-.rw-row-name { font-weight: 800; flex: 1; font-size: 14px; min-width: 90px; }
+.rw-row-name-container { flex: 1; min-width: 120px; }
+.rw-row-name { font-weight: 800; font-size: 14px; display: block; }
+.rw-row-school { font-size: 12px; opacity: 0.6; font-weight: 600; display: block; margin-top: 1px; }
+
 .rw-row-score { font-weight: 900; color: var(--flame); font-size: 14px; white-space: nowrap; margin-left: auto; }
 .rw-row-score small { color: var(--ink); opacity:0.5; font-weight:700; }
 
+.rw-row.rw-status-notarget { background: rgba(253, 232, 228, 0.95); }
+.rw-row.rw-status-notarget .rw-row-score { color: #C6401F; font-weight: 800; }
 .rw-row.rw-pending { opacity: 0.65; }
 .rw-row.rw-pending .rw-row-score { color: var(--ink); opacity: 0.5; font-size: 12px; }
 
 @media (min-width: 720px) {
   .rw-row { flex-wrap: nowrap; padding: 10px 18px; }
-  .rw-row-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-}
-
-@media (max-width: 719px) {
-  .rw-row-name { flex-basis: 100%; }
-  .rw-row-score { order: 2; }
 }
 
 .rw-empty {
@@ -274,11 +284,28 @@
 
 /* Admin panel */
 .rw-admin {
-  position: relative; z-index: 2; max-width: 640px; margin: 26px auto 0;
+  position: relative; z-index: 2; max-width: 750px; margin: 26px auto 0;
   background: rgba(255,255,255,0.97); border-radius: 20px; padding: 20px; box-shadow: var(--card-shadow);
 }
-.rw-admin h3 { font-family: 'Baloo 2', sans-serif; margin: 0 0 4px; font-size: 17px; }
+.rw-admin-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 10px;
+}
+.rw-admin h3 { font-family: 'Baloo 2', sans-serif; margin: 0; font-size: 17px; }
 .rw-admin p.rw-sub { margin: 0 0 16px; font-size: 12px; opacity: 0.6; font-weight: 700; }
+
+.rw-btn-reset {
+  font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 12px;
+  background: #E4572E; color: var(--white); border: none; border-radius: 8px;
+  padding: 6px 12px; cursor: pointer; transition: transform 0.1s ease;
+}
+.rw-btn-reset:hover { background: #cc4e29; transform: scale(1.02); }
+
+.rw-import-box {
+  background: #f0f4f8; padding: 12px 14px; border-radius: 12px; margin-bottom: 16px;
+  border: 2px dashed #cbd5e1; display: flex; align-items: center; gap: 12px; justify-content: space-between; flex-wrap: wrap;
+}
+.rw-import-box label { font-size: 12px; font-weight: 800; color: var(--ink); }
+.rw-import-box input[type="file"] { font-size: 12px; font-family: inherit; font-weight: 600; }
 
 .rw-add-form { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
 .rw-add-form input {
@@ -292,23 +319,39 @@
 }
 
 .rw-admin-row {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 0; border-top: 1px dashed #e0e8f0;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 0; border-top: 1px dashed #e0e8f0;
 }
 .rw-admin-row:first-of-type { border-top: none; }
-.rw-admin-row .rw-a-name { font-weight: 800; font-size: 13.5px; flex: 1; min-width: 110px; }
+.rw-admin-row .rw-a-name-box { flex: 1; min-width: 130px; }
+.rw-admin-row .rw-a-name { font-weight: 800; font-size: 14px; display: block; }
+.rw-admin-row .rw-a-school { font-size: 11.5px; opacity: 0.6; font-weight: 700; display: block; }
+
 .rw-admin-row .rw-a-field { display: flex; align-items: center; gap: 4px; }
 .rw-admin-row .rw-a-field label { font-size: 10px; font-weight: 800; opacity: 0.5; }
-.rw-admin-row input[type="number"] {
+.rw-admin-row input[type="text"] {
   width: 74px; padding: 7px 8px; border-radius: 8px; border: 2px solid #dbe6f2;
-  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 13px; outline: none;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; outline: none; text-align: center;
 }
-.rw-admin-row input[type="number"]:focus { border-color: var(--sky-mid); }
+.rw-admin-row input[type="text"]:focus { border-color: var(--sky-mid); }
 .rw-a-btns { display: flex; gap: 6px; }
 .rw-a-btns button {
   border: none; border-radius: 8px; padding: 7px 10px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer;
 }
 .rw-a-save { background: var(--grass); color: white; }
 .rw-a-del { background: #FDE8E4; color: #C6401F; }
+
+/* Watermark */
+.rw-watermark {
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
 
 .rw-toast {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -317,9 +360,11 @@
 }
 .rw-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-@media (max-width: 480px) {
-  .rw-pcard { width: 140px; }
-  .rw-title h1 { font-size: 22px; }
+@media (max-width: 540px) {
+  .rw-pcard { width: 145px; padding: 12px 8px; }
+  .rw-title h1 { font-size: 24px; }
+  .rw-title p { font-size: 9px; }
+  .rw-logo-badge { width: 52px; height: 52px; }
 }
 </style>
 
@@ -337,16 +382,17 @@
 
   <div class="rw-header">
     <div class="rw-title-wrap">
-      <div class="rw-rocket-badge">🚀</div>
+      <!-- Menggunakan berkas logo baru image_1a71b3.jpg -->
+      <img src="image_1a71b3.jpg" class="rw-logo-badge" alt="Logo LABIABA">
       <div class="rw-title">
-        <h1>LABIABA</h1>
+        <h1>LABIABA INDONESIA</h1>
         <p id="rwSubtitle">Kompetisi Roket Air Regional Kalimantan Barat</p>
       </div>
     </div>
     <button type="button" class="rw-login-btn" id="rwLoginBtn">🔐 Login Panitia</button>
   </div>
 
-  <div class="rw-section-label">🏆 JARAK SKOR 🏆</div>
+  <div class="rw-section-label">🏆 Podium Juara 🏆</div>
   <div class="rw-podium" id="rwPodium"></div>
 
   <div class="rw-section-label" id="rwOtherLabel" style="display:none;">Peringkat Lainnya</div>
@@ -355,14 +401,30 @@
   <div id="rwEmpty" class="rw-empty">Menghubungkan ke satelit cloud... 🛰️</div>
 
   <div id="rwAdminPanel" class="rw-admin" style="display:none;">
-    <h3>🛠️ Panel Panitia</h3>
-    <p class="rw-sub">Masukkan jarak mendarat dari titik target (meter) untuk setiap peluncuran. Skor terbaik = jarak terkecil.</p>
+    <div class="rw-admin-header">
+      <h3>🛠️ Panel Panitia</h3>
+      <button type="button" class="rw-btn-reset" id="rwResetBtn">💥 Reset Semua Data</button>
+    </div>
+    <p class="rw-sub">Masukkan jarak mendarat (meter) atau berikan tanda strip/minus (<code>-</code>) jika peluncuran tidak mencapai target.</p>
+    
+    <!-- Fitur Unggah Database via CSV -->
+    <div class="rw-import-box">
+      <label>📂 Import Peserta dari CSV:</label>
+      <input type="file" id="rwCsvFile" accept=".csv">
+    </div>
+
+    <!-- Form Tambah Manual dengan Asal Sekolah -->
     <div class="rw-add-form">
-      <input type="text" id="rwNewName" placeholder="Nama tim baru...">
+      <input type="text" id="rwNewName" placeholder="Nama tim / peserta...">
+      <input type="text" id="rwNewSchool" placeholder="Asal sekolah...">
       <button type="button" id="rwAddBtn">+ Tambah Tim</button>
     </div>
+    
     <div id="rwAdminList"></div>
   </div>
+
+  <!-- Teks Watermark di Sisi Kanan Bawah -->
+  <div class="rw-watermark">Web dev by : Daris</div>
 </div>
 
 <div class="rw-overlay" id="rwOverlay">
@@ -386,7 +448,6 @@
   let teams = [];
   let isAdmin = false;
 
-  // Konfigurasi otomatis mengarah ke URL Firebase Anda dari image_199fb8.png
   const firebaseConfig = {
     databaseURL: "https://labiaba-default-rtdb.firebaseio.com/"
   };
@@ -404,10 +465,25 @@
     t._timer = setTimeout(()=> t.classList.remove('show'), 2200);
   }
 
+  // Mengembalikan angka skor terbaik, mengabaikan '-', null, atau kosong
   function bestScore(team){
-    const vals = [team.launch1, team.launch2].filter(v => v !== null && v !== undefined && v !== '' && !isNaN(v));
+    const vals = [team.launch1, team.launch2].filter(v => v !== null && v !== undefined && v !== '' && v !== '-');
     if (vals.length === 0) return null;
     return Math.min(...vals.map(Number));
+  }
+
+  // Menentukan status mutakhir tim berdasarkan isi peluncuran
+  function getTeamStatus(team){
+    const l1 = team.launch1;
+    const l2 = team.launch2;
+    const hasLaunched = (l1 !== null && l1 !== undefined && l1 !== '') || (l2 !== null && l2 !== undefined && l2 !== '');
+    
+    if (!hasLaunched) return 'pending'; // Belum meluncur sama sekali
+    
+    const best = bestScore(team);
+    if (best !== null) return 'scored'; // Ada skor angka valid
+    
+    return 'notarget'; // Sudah meluncur tapi statusnya tidak target (-)
   }
 
   function miniTarget(distance, maxRef){
@@ -426,7 +502,6 @@
     </svg>`;
   }
 
-  // Menangkap perubahan data secara real-time dari internet
   dbRef.on('value', (snapshot) => {
     const data = snapshot.val();
     teams = Array.isArray(data) ? data : [];
@@ -435,17 +510,30 @@
 
   function saveTeamsToCloud(){
     dbRef.set(teams).catch(err => {
-      toast('⚠️ Gagal menyimpan! Pastikan Rules Firebase sudah diubah menjadi true.');
+      toast('⚠️ Gagal menyimpan! Pastikan Rules Firebase Anda sudah diubah ke true.');
     });
   }
 
-  function getRanked(){
-    const withScore = teams
-      .map(t => ({...t, best: bestScore(t)}))
-      .filter(t => t.best !== null)
-      .sort((a,b) => a.best - b.best);
-    const pending = teams.filter(t => bestScore(t) === null);
-    return { withScore, pending };
+  function getRankedGroups(){
+    const scoredList = [];
+    const noTargetList = [];
+    const pendingList = [];
+
+    teams.forEach(t => {
+      const status = getTeamStatus(t);
+      if (status === 'scored') {
+        scoredList.push({ ...t, best: bestScore(t), groupStatus: 'scored' });
+      } else if (status === 'notarget') {
+        noTargetList.push({ ...t, best: null, groupStatus: 'notarget' });
+      } else {
+        pendingList.push({ ...t, best: null, groupStatus: 'pending' });
+      }
+    });
+
+    // Urutkan yang ada angka dari terkecil ke terbesar
+    scoredList.sort((a,b) => a.best - b.best);
+
+    return { scoredList, noTargetList, pendingList };
   }
 
   function render(){
@@ -461,17 +549,20 @@
 
     if (teams.length === 0) {
       emptyEl.style.display = 'block';
-      emptyEl.textContent = 'Belum ada peserta terdaftar. Panitia bisa login untuk menambahkan tim! 🛰️';
+      emptyEl.textContent = 'Belum ada peserta terdaftar. Panitia silakan login untuk tambah manual atau import data CSV! 🛰️';
       otherLabel.style.display = 'none';
       renderAdmin();
       return;
     }
     emptyEl.style.display = 'none';
 
-    const { withScore, pending } = getRanked();
-    const maxRef = withScore.length ? Math.max(...withScore.map(t=>t.best), 5) : 5;
-    const top3 = withScore.slice(0,3);
-    const rest = withScore.slice(3);
+    const { scoredList, noTargetList, pendingList } = getRankedGroups();
+    const maxRef = scoredList.length ? Math.max(...scoredList.map(t=>t.best), 5) : 5;
+    
+    // Ambil 3 peringkat teratas ber-skor untuk ditaruh di podium
+    const top3 = scoredList.slice(0, 3);
+    const restScored = scoredList.slice(3);
+    
     const medals = ['gold','silver','bronze'];
     const medalIcon = ['🥇','🥈','🥉'];
 
@@ -483,34 +574,59 @@
         <span class="rw-rank-tag">RANK ${i+1}</span>
         ${miniTarget(t.best, maxRef)}
         <div class="rw-pname">${escapeHtml(t.name)}</div>
+        <div class="rw-pschool">${escapeHtml(t.school || '-')}</div>
         <div class="rw-pscore">${t.best.toFixed(2)} <span>m</span></div>
       `;
       podiumEl.appendChild(card);
     });
 
-    if (rest.length > 0 || pending.length > 0) {
+    // Gabungkan peringkat sisa, tim tidak target, dan tim pending di daftar bawah
+    if (restScored.length > 0 || noTargetList.length > 0 || pendingList.length > 0) {
       otherLabel.style.display = 'block';
     } else {
       otherLabel.style.display = 'none';
     }
 
-    rest.forEach((t, i) => {
+    // 1. Render Sisa yang punya skor numerik
+    restScored.forEach((t, i) => {
       const row = document.createElement('div');
       row.className = 'rw-row';
       row.innerHTML = `
-        <div class="rw-row-rank">${i+4}</div>
-        <div class="rw-row-name">${escapeHtml(t.name)}</div>
+        <div class="rw-row-rank">${i + 4}</div>
+        <div class="rw-row-name-container">
+          <span class="rw-row-name">${escapeHtml(t.name)}</span>
+          <span class="rw-row-school">${escapeHtml(t.school || '-')}</span>
+        </div>
         <div class="rw-row-score">${t.best.toFixed(2)} <small>m</small></div>
       `;
       listEl.appendChild(row);
     });
 
-    pending.forEach(t => {
+    // 2. Render yang berstatus Tidak Target (-)
+    noTargetList.forEach((t) => {
+      const row = document.createElement('div');
+      row.className = 'rw-row rw-status-notarget';
+      row.innerHTML = `
+        <div class="rw-row-rank" style="background:#E4572E;">–</div>
+        <div class="rw-row-name-container">
+          <span class="rw-row-name">${escapeHtml(t.name)}</span>
+          <span class="rw-row-school">${escapeHtml(t.school || '-')}</span>
+        </div>
+        <div class="rw-row-score">Tidak Target</div>
+      `;
+      listEl.appendChild(row);
+    });
+
+    // 3. Render yang Belum Meluncur sama sekali
+    pendingList.forEach((t) => {
       const row = document.createElement('div');
       row.className = 'rw-row rw-pending';
       row.innerHTML = `
-        <div class="rw-row-rank">–</div>
-        <div class="rw-row-name">${escapeHtml(t.name)}</div>
+        <div class="rw-row-rank" style="background:#adb5bd;">–</div>
+        <div class="rw-row-name-container">
+          <span class="rw-row-name">${escapeHtml(t.name)}</span>
+          <span class="rw-row-school">${escapeHtml(t.school || '-')}</span>
+        </div>
         <div class="rw-row-score">Belum meluncur</div>
       `;
       listEl.appendChild(row);
@@ -538,14 +654,17 @@
       const row = document.createElement('div');
       row.className = 'rw-admin-row';
       row.innerHTML = `
-        <div class="rw-a-name">${escapeHtml(t.name)}</div>
-        <div class="rw-a-field">
-          <label>L1 (m)</label>
-          <input type="number" step="0.01" min="0" value="${t.launch1 !== null && t.launch1 !== undefined ? t.launch1 : ''}" data-id="${t.id}" data-field="launch1">
+        <div class="rw-a-name-box">
+          <span class="rw-a-name">${escapeHtml(t.name)}</span>
+          <span class="rw-a-school">${escapeHtml(t.school || '-')}</span>
         </div>
         <div class="rw-a-field">
-          <label>L2 (m)</label>
-          <input type="number" step="0.01" min="0" value="${t.launch2 !== null && t.launch2 !== undefined ? t.launch2 : ''}" data-id="${t.id}" data-field="launch2">
+          <label>L1</label>
+          <input type="text" value="${t.launch1 !== null && t.launch1 !== undefined ? t.launch1 : ''}" data-id="${t.id}" data-field="launch1" placeholder="m / -">
+        </div>
+        <div class="rw-a-field">
+          <label>L2</label>
+          <input type="text" value="${t.launch2 !== null && t.launch2 !== undefined ? t.launch2 : ''}" data-id="${t.id}" data-field="launch2" placeholder="m / -">
         </div>
         <div class="rw-a-btns">
           <button type="button" class="rw-a-save" data-id="${t.id}">💾 Simpan</button>
@@ -561,15 +680,23 @@
         const input1 = document.querySelector(`#rwAdminList input[data-id="${id}"][data-field="launch1"]`);
         const input2 = document.querySelector(`#rwAdminList input[data-id="${id}"][data-field="launch2"]`);
         
-        const l1 = input1 ? input1.value : '';
-        const l2 = input2 ? input2.value : '';
+        let l1 = input1 ? input1.value.trim() : '';
+        let l2 = input2 ? input2.value.trim() : '';
         
         const team = teams.find(x => x.id === id);
         if (team) {
-          team.launch1 = l1 === '' ? null : parseFloat(l1);
-          team.launch2 = l2 === '' ? null : parseFloat(l2);
+          // Validasi input peluncuran 1
+          if (l1 === '-') team.launch1 = '-';
+          else if (l1 === '') team.launch1 = null;
+          else team.launch1 = isNaN(parseFloat(l1)) ? null : parseFloat(l1);
+
+          // Validasi input peluncuran 2
+          if (l2 === '-') team.launch2 = '-';
+          else if (l2 === '') team.launch2 = null;
+          else team.launch2 = isNaN(parseFloat(l2)) ? null : parseFloat(l2);
+
           saveTeamsToCloud();
-          toast('✅ Skor tersimpan ke Cloud!');
+          toast('✅ Data disimpan online!');
         }
       });
     });
@@ -579,13 +706,61 @@
         const id = btn.dataset.id;
         const team = teams.find(x => x.id === id);
         if (!team) return;
-        if (!confirm(`Hapus tim "${team.name}"?`)) return;
+        if (!confirm(`Hapus data peserta "${team.name}"?`)) return;
         teams = teams.filter(x => x.id !== id);
         saveTeamsToCloud();
-        toast('🗑️ Tim dihapus dari Cloud');
+        toast('🗑️ Peserta berhasil dihapus');
       });
     });
   }
+
+  // Pengolah Data Upload File CSV
+  el('rwCsvFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const contents = evt.target.result;
+      const lines = contents.split(/\r?\n/);
+      let count = 0;
+
+      lines.forEach(line => {
+        if (!line.trim()) return;
+        
+        // Membagi kolom berdasarkan koma atau titik koma
+        const cols = line.split(/[,;]/);
+        if (cols.length >= 1) {
+          const rawName = cols[0].trim();
+          const rawSchool = cols[1] ? cols[1].trim() : '';
+
+          // Lewati baris jika terdeteksi merupakan judul kolom teks header
+          if (rawName.toLowerCase() === 'nama' || rawName.toLowerCase() === 'name') return;
+
+          if (rawName) {
+            const newId = 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+            teams.push({
+              id: newId,
+              name: rawName,
+              school: rawSchool,
+              launch1: null,
+              launch2: null
+            });
+            count++;
+          }
+        }
+      });
+
+      if (count > 0) {
+        saveTeamsToCloud();
+        toast(`🎉 Berhasil memasukkan ${count} tim dari CSV!`);
+      } else {
+        toast('⚠️ Format salah atau tidak ditemukan data valid di CSV.');
+      }
+      el('rwCsvFile').value = ''; 
+    };
+    reader.readAsText(file);
+  });
 
   el('rwLoginBtn').addEventListener('click', () => {
     if (isAdmin) {
@@ -626,15 +801,30 @@
 
   el('rwAddBtn').addEventListener('click', () => {
     const nameInput = el('rwNewName');
-    if (!nameInput) return;
+    const schoolInput = el('rwNewSchool');
+    if (!nameInput || !schoolInput) return;
+
     const name = nameInput.value.trim();
-    if (!name) { toast('⚠️ Nama tim tidak boleh kosong'); return; }
+    const school = schoolInput.value.trim();
+
+    if (!name) { toast('⚠️ Nama tidak boleh kosong'); return; }
     
     const newId = 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-    teams.push({ id: newId, name, launch1: null, launch2: null });
+    teams.push({ id: newId, name, school, launch1: null, launch2: null });
+    
     nameInput.value = '';
+    schoolInput.value = '';
     saveTeamsToCloud();
     toast('🎉 Tim baru ditambahkan online!');
+  });
+
+  el('rwResetBtn').addEventListener('click', () => {
+    const yakin = confirm('⚠️ PERINGATAN KERAS!\n\nApakah Anda yakin ingin MENGHAPUS SEMUA DATA TIM dari database? Tindakan ini tidak bisa dibatalkan.');
+    if (yakin) {
+      dbRef.set(null)
+        .then(() => { toast('💥 Database dikosongkan total!'); })
+        .catch(err => { toast('⚠️ Gagal mereset database.'); });
+    }
   });
 })();
 </script>

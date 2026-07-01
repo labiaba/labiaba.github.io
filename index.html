@@ -1,3 +1,6 @@
+<!-- Tag wajib agar browser HP mendeteksi skala layar dengan benar -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght=500;600;700;800&family=Nunito:wght=400;600;700;800;900&display=swap');
 
@@ -360,11 +363,118 @@
 }
 .rw-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-@media (max-width: 540px) {
-  .rw-pcard { width: 145px; padding: 12px 8px; }
-  .rw-title h1 { font-size: 24px; }
-  .rw-title p { font-size: 9px; }
-  .rw-logo-badge { width: 52px; height: 52px; }
+
+/* ==========================================================================
+   KODE BARU: OPTIMASI RESPONSIVE OTOMATIS KHUSUS HP (LAYAR KECIL / DI BAWAH 600PX)
+   ========================================================================== */
+@media (max-width: 600px) {
+  .rw-root {
+    border-radius: 14px; /* Sudut melengkung disesuaikan dengan layar HP */
+    padding: 20px 12px 80px; /* Jarak padding dikurangi agar tidak memakan ruang */
+  }
+
+  /* 1. Header & Judul Otomatis Center Vertikal */
+  .rw-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+  .rw-title-wrap {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rw-title h1 {
+    font-size: 25px;
+  }
+  .rw-title p {
+    font-size: 9.5px;
+  }
+  .rw-login-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* 2. Formasi Podium Berubah Vertikal & Urutan Logis (Rank 1 Teratas, Rank 2, Rank 3) */
+  .rw-podium {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .rw-pcard {
+    width: 100%;
+    max-width: 290px;
+    margin-bottom: 0 !important; /* Reset margin jomplang bawaan komputer desktop */
+    padding: 16px 14px;
+  }
+  .rw-pcard.gold { order: 1; }   /* Rank 1 dipaksa paling atas di HP */
+  .rw-pcard.silver { order: 2; } /* Rank 2 di bawahnya */
+  .rw-pcard.bronze { order: 3; } /* Rank 3 paling bawah */
+
+  /* 3. Panel Administrasi Panitia Lebar Penuh */
+  .rw-import-box {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 10px;
+  }
+  .rw-import-box input[type="file"] {
+    width: 100%;
+  }
+  .rw-add-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rw-add-form input, .rw-add-form button {
+    width: 100% !important;
+    flex: none;
+  }
+
+  /* 4. Baris Pengisian Skor Admin Dibuat Kotak Finger-Friendly */
+  .rw-admin-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px 0;
+  }
+  .rw-a-name-box {
+    text-align: center;
+  }
+  .rw-admin-row .rw-a-field {
+    justify-content: space-between;
+    background: #f1f5f9;
+    padding: 8px 14px;
+    border-radius: 10px;
+    width: 100%;
+  }
+  .rw-admin-row input[type="text"] {
+    width: 110px; /* Kolom input nilai di HP lebih lebar agar mudah diketik */
+    padding: 8px;
+  }
+  .rw-a-btns {
+    justify-content: center;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .rw-a-btns button {
+    flex: 1;
+    padding: 11px;
+    font-size: 14px;
+  }
+}
+
+/* Optimasi ekstra untuk ukuran HP yang sangat sempit */
+@media (max-width: 400px) {
+  .rw-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 14px;
+  }
+  .rw-row-score {
+    margin-left: 0;
+    margin-top: 6px;
+  }
 }
 </style>
 

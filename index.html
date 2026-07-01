@@ -266,7 +266,7 @@
 .rw-row.rw-pending { opacity: 0.65; }
 .rw-row.rw-pending .rw-row-score { color: var(--ink); opacity: 0.5; font-size: 12px; }
 
-/* Desktop / laptop mode: compact single-line table-style rows */
+/* Desktop / laptop mode */
 @media (min-width: 720px) {
   .rw-list-head { display: flex; }
   .rw-row { flex-wrap: nowrap; padding: 10px 18px; }
@@ -276,7 +276,7 @@
   .rw-row-score { width: 90px; text-align: right; }
 }
 
-/* Mobile / hp mode: roomy stacked rows for easy tapping */
+/* Mobile mode */
 @media (max-width: 719px) {
   .rw-row-name { flex-basis: 100%; }
   .rw-row-launches { flex-basis: 100%; order: 3; }
@@ -513,10 +513,9 @@
   }
 
   function miniTarget(distance, maxRef){
-    // distance: meters from bullseye. maxRef used to normalize dot placement (visual only, capped)
     const norm = Math.min(distance / maxRef, 1);
-    const radius = 6 + norm * 22; // px from center, center=bullseye
-    const angle = (distance * 137.5) % 360; // deterministic pseudo-scatter based on value
+    const radius = 6 + norm * 22; 
+    const angle = (distance * 137.5) % 360; 
     const rad = angle * Math.PI / 180;
     const cx = 34 + radius * Math.cos(rad);
     const cy = 34 + radius * Math.sin(rad);
@@ -529,10 +528,26 @@
     </svg>`;
   }
 
+  // Helper pengaman parsing data agar sinkronisasi antar device berjalan mulus
+  function parseTeamsData(res) {
+    if (!res) return [];
+    if (Array.isArray(res)) return res;
+    if (res.value) {
+      if (Array.isArray(res.value)) return res.value;
+      if (typeof res.value === 'string') {
+        try { return JSON.parse(res.value); } catch(e) { return []; }
+      }
+    }
+    if (typeof res === 'string') {
+      try { return JSON.parse(res); } catch(e) { return []; }
+    }
+    return [];
+  }
+
   async function loadTeams(){
     try {
       const res = await window.storage.get(STORAGE_KEY, true);
-      teams = res && res.value ? JSON.parse(res.value) : [];
+      teams = parseTeamsData(res);
     } catch(e) {
       teams = [];
     }
@@ -687,12 +702,11 @@
     });
   }
 
-  // Login modal
   el('rwLoginBtn').addEventListener('click', () => {
     if (isAdmin) {
       isAdmin = false;
       el('rwLoginBtn').textContent = '🔐 Login Panitia';
-      el('rwLoginBtn').classList.remove('active');
+      el('rwLoginBtnBtn').classList.remove('active');
       render();
       toast('👋 Keluar dari mode panitia');
       return;
@@ -736,18 +750,18 @@
     toast('🎉 Tim baru ditambahkan!');
   });
 
-  // Live-ish refresh for spectators (skip while admin is actively editing to avoid disrupting inputs)
+  // Sistem background-poll yang dipercepat agar data terasa instan/real-time bagi penonton
   setInterval(async () => {
-    if (isAdmin) return;
+    if (isAdmin) return; 
     try {
       const res = await window.storage.get(STORAGE_KEY, true);
-      const fresh = res && res.value ? JSON.parse(res.value) : [];
+      const fresh = parseTeamsData(res);
       if (JSON.stringify(fresh) !== JSON.stringify(teams)) {
         teams = fresh;
         render();
       }
     } catch(e) {}
-  }, 6000);
+  }, 2000); // Waktu dipercepat dari 6 detik menjadi 2 detik
 
   loadTeams();
 })();

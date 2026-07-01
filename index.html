@@ -323,6 +323,10 @@
 }
 </style>
 
+<!-- Pustaka Sinkronisasi Cloud Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <div class="rw-root" id="rwRoot">
   <div class="rw-cloud" style="width:90px;height:34px;top:14px;left:6%;"></div>
   <div class="rw-cloud" style="width:60px;height:24px;top:40px;left:78%;"></div>
@@ -348,7 +352,7 @@
   <div class="rw-section-label" id="rwOtherLabel" style="display:none;">Peringkat Lainnya</div>
   <div class="rw-list" id="rwList"></div>
 
-  <div id="rwEmpty" class="rw-empty">Belum ada peserta terdaftar. Panitia bisa login untuk menambahkan tim! 🛰️</div>
+  <div id="rwEmpty" class="rw-empty">Membuka sambungan cloud papan skor... 🛰️</div>
 
   <div id="rwAdminPanel" class="rw-admin" style="display:none;">
     <h3>🛠️ Panel Panitia</h3>
@@ -378,11 +382,25 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'roket-air-teams-v3';
   const ADMIN_PASSWORD = 'labiaba';
   let teams = [];
   let isAdmin = false;
 
+  // ==========================================
+  // SETUP FIREBASE KAMU DI SINI
+  // ==========================================
+  const firebaseConfig = {
+    databaseURL: "ISI_DENGAN_URL_FIREBASE_KAMU"
+  };
+  
+  // Proteksi jika user belum memasukkan URL asli
+  if(firebaseConfig.databaseURL.includes("ISI_DENGAN_URL")) {
+    alert("⚠️ Kamu belum memasukkan URL Firebase di bagian bawah kode HTML!");
+  } else {
+    firebase.initializeApp(firebaseConfig);
+  }
+  
+  const dbRef = firebase.database().ref('roket_championship_v3');
   const el = (id) => document.getElementById(id);
 
   function toast(msg){
@@ -416,23 +434,17 @@
     </svg>`;
   }
 
-  function loadTeams(){
-    try {
-      const res = localStorage.getItem(STORAGE_KEY);
-      const parsed = res ? JSON.parse(res) : [];
-      teams = Array.isArray(parsed) ? parsed : [];
-    } catch(e) {
-      teams = [];
-    }
+  // Sinkronisasi data real-time otomatis dari cloud internet
+  dbRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    teams = Array.isArray(data) ? data : [];
     render();
-  }
+  });
 
-  function saveTeams(){
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
-    } catch(e) {
-      toast('⚠️ Gagal menyimpan ke penyimpanan lokal browser');
-    }
+  function saveTeamsToCloud(){
+    dbRef.set(teams).catch(err => {
+      toast('⚠️ Gagal menyimpan ke cloud online. Periksa koneksi internet.');
+    });
   }
 
   function getRanked(){
@@ -457,6 +469,7 @@
 
     if (teams.length === 0) {
       emptyEl.style.display = 'block';
+      emptyEl.textContent = 'Belum ada peserta terdaftar. Panitia bisa login untuk menambahkan tim! 🛰️';
       otherLabel.style.display = 'none';
       renderAdmin();
       return;
@@ -550,7 +563,6 @@
       adminListEl.appendChild(row);
     });
 
-    // Menggunakan pencarian dokumen absolut untuk keamanan query data
     adminListEl.querySelectorAll('.rw-a-save').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.id;
@@ -564,9 +576,8 @@
         if (team) {
           team.launch1 = l1 === '' ? null : parseFloat(l1);
           team.launch2 = l2 === '' ? null : parseFloat(l2);
-          saveTeams();
-          render();
-          toast('✅ Skor tersimpan!');
+          saveTeamsToCloud();
+          toast('✅ Skor tersimpan ke Cloud!');
         }
       });
     });
@@ -578,9 +589,8 @@
         if (!team) return;
         if (!confirm(`Hapus tim "${team.name}"?`)) return;
         teams = teams.filter(x => x.id !== id);
-        saveTeams();
-        render();
-        toast('🗑️ Tim dihapus');
+        saveTeamsToCloud();
+        toast('🗑️ Tim dihapus dari Cloud');
       });
     });
   }
@@ -631,21 +641,8 @@
     const newId = 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
     teams.push({ id: newId, name, launch1: null, launch2: null });
     nameInput.value = '';
-    saveTeams();
-    render();
-    toast('🎉 Tim baru ditambahkan!');
+    saveTeamsToCloud();
+    toast('🎉 Tim baru ditambahkan online!');
   });
-
-  window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) {
-      try {
-        const parsed = e.newValue ? JSON.parse(e.newValue) : [];
-        teams = Array.isArray(parsed) ? parsed : [];
-        render();
-      } catch(err) {}
-    }
-  });
-
-  loadTeams();
 })();
 </script>

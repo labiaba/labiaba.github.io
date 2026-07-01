@@ -394,7 +394,7 @@
   };
   
   // Proteksi jika user belum memasukkan URL asli
-  if(firebaseConfig.databaseURL.includes("ISI_DENGAN_URL")) {
+  if(firebaseConfig.databaseURL.includes("https://labiaba-default-rtdb.firebaseio.com/")) {
     alert("⚠️ Kamu belum memasukkan URL Firebase di bagian bawah kode HTML!");
   } else {
     firebase.initializeApp(firebaseConfig);

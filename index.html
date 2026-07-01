@@ -1,5 +1,5 @@
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght=500;600;700;800&family=Nunito:wght=400;600;700;800;900&display=swap');
 
 .rw-root {
   --sky-top: #5AC8FA;
@@ -323,7 +323,7 @@
 }
 </style>
 
-<!-- Pustaka Sinkronisasi Cloud Firebase -->
+<!-- Memuat Firebase Libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -352,7 +352,7 @@
   <div class="rw-section-label" id="rwOtherLabel" style="display:none;">Peringkat Lainnya</div>
   <div class="rw-list" id="rwList"></div>
 
-  <div id="rwEmpty" class="rw-empty">Membuka sambungan cloud papan skor... 🛰️</div>
+  <div id="rwEmpty" class="rw-empty">Menghubungkan ke satelit cloud... 🛰️</div>
 
   <div id="rwAdminPanel" class="rw-admin" style="display:none;">
     <h3>🛠️ Panel Panitia</h3>
@@ -386,20 +386,12 @@
   let teams = [];
   let isAdmin = false;
 
-  // ==========================================
-  // SETUP FIREBASE KAMU DI SINI
-  // ==========================================
+  // Konfigurasi otomatis mengarah ke URL Firebase Anda dari image_199fb8.png
   const firebaseConfig = {
-    databaseURL: "ISI_DENGAN_URL_FIREBASE_KAMU"
+    databaseURL: "https://labiaba-default-rtdb.firebaseio.com/"
   };
   
-  // Proteksi jika user belum memasukkan URL asli
-  if(firebaseConfig.databaseURL.includes("https://labiaba-default-rtdb.firebaseio.com/")) {
-    alert("⚠️ Kamu belum memasukkan URL Firebase di bagian bawah kode HTML!");
-  } else {
-    firebase.initializeApp(firebaseConfig);
-  }
-  
+  firebase.initializeApp(firebaseConfig);
   const dbRef = firebase.database().ref('roket_championship_v3');
   const el = (id) => document.getElementById(id);
 
@@ -434,7 +426,7 @@
     </svg>`;
   }
 
-  // Sinkronisasi data real-time otomatis dari cloud internet
+  // Menangkap perubahan data secara real-time dari internet
   dbRef.on('value', (snapshot) => {
     const data = snapshot.val();
     teams = Array.isArray(data) ? data : [];
@@ -443,7 +435,7 @@
 
   function saveTeamsToCloud(){
     dbRef.set(teams).catch(err => {
-      toast('⚠️ Gagal menyimpan ke cloud online. Periksa koneksi internet.');
+      toast('⚠️ Gagal menyimpan! Pastikan Rules Firebase sudah diubah menjadi true.');
     });
   }
 

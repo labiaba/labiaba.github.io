@@ -339,7 +339,7 @@
         <p id="rwSubtitle">Papan skor · terdekat ke target menang!</p>
       </div>
     </div>
-    <button class="rw-login-btn" id="rwLoginBtn">🔐 Login Panitia</button>
+    <button type="button" class="rw-login-btn" id="rwLoginBtn">🔐 Login Panitia</button>
   </div>
 
   <div class="rw-section-label">🏆 Podium Juara 🏆</div>
@@ -355,7 +355,7 @@
     <p class="rw-sub">Masukkan jarak mendarat dari titik target (meter) untuk setiap peluncuran. Skor terbaik = jarak terkecil.</p>
     <div class="rw-add-form">
       <input type="text" id="rwNewName" placeholder="Nama tim baru...">
-      <button id="rwAddBtn">+ Tambah Tim</button>
+      <button type="button" id="rwAddBtn">+ Tambah Tim</button>
     </div>
     <div id="rwAdminList"></div>
   </div>
@@ -368,8 +368,8 @@
     <input type="password" id="rwPassInput" placeholder="Masukkan password...">
     <div class="rw-modal-error" id="rwPassError"></div>
     <div class="rw-modal-btns">
-      <button class="rw-btn ghost" id="rwCancelBtn">Batal</button>
-      <button class="rw-btn primary" id="rwSubmitBtn">Masuk</button>
+      <button type="button" class="rw-btn ghost" id="rwCancelBtn">Batal</button>
+      <button type="button" class="rw-btn primary" id="rwSubmitBtn">Masuk</button>
     </div>
   </div>
 </div>
@@ -378,7 +378,7 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'roket-air-teams-v2';
+  const STORAGE_KEY = 'roket-air-teams-v3';
   const ADMIN_PASSWORD = 'labiaba';
   let teams = [];
   let isAdmin = false;
@@ -387,6 +387,7 @@
 
   function toast(msg){
     const t = el('rwToast');
+    if (!t) return;
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(t._timer);
@@ -415,11 +416,11 @@
     </svg>`;
   }
 
-  // Menggunakan localStorage web standar (bukan window.storage)
   function loadTeams(){
     try {
       const res = localStorage.getItem(STORAGE_KEY);
-      teams = res ? JSON.parse(res) : [];
+      const parsed = res ? JSON.parse(res) : [];
+      teams = Array.isArray(parsed) ? parsed : [];
     } catch(e) {
       teams = [];
     }
@@ -430,7 +431,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
     } catch(e) {
-      toast('⚠️ Gagal menyimpan data');
+      toast('⚠️ Gagal menyimpan ke penyimpanan lokal browser');
     }
   }
 
@@ -444,11 +445,12 @@
   }
 
   function render(){
-    const { withScore, pending } = getRanked();
     const podiumEl = el('rwPodium');
     const listEl = el('rwList');
     const emptyEl = el('rwEmpty');
     const otherLabel = el('rwOtherLabel');
+
+    if(!podiumEl || !listEl || !emptyEl || !otherLabel) return;
 
     podiumEl.innerHTML = '';
     listEl.innerHTML = '';
@@ -461,6 +463,7 @@
     }
     emptyEl.style.display = 'none';
 
+    const { withScore, pending } = getRanked();
     const maxRef = withScore.length ? Math.max(...withScore.map(t=>t.best), 5) : 5;
     const top3 = withScore.slice(0,3);
     const rest = withScore.slice(3);
@@ -519,10 +522,13 @@
 
   function renderAdmin(){
     const panel = el('rwAdminPanel');
+    const adminListEl = el('rwAdminList');
+    if (!panel || !adminListEl) return;
+
     if (!isAdmin) { panel.style.display = 'none'; return; }
     panel.style.display = 'block';
-    const listEl = el('rwAdminList');
-    listEl.innerHTML = '';
+    adminListEl.innerHTML = '';
+    
     teams.forEach((t) => {
       const row = document.createElement('div');
       row.className = 'rw-admin-row';
@@ -530,25 +536,30 @@
         <div class="rw-a-name">${escapeHtml(t.name)}</div>
         <div class="rw-a-field">
           <label>L1 (m)</label>
-          <input type="number" step="0.01" min="0" value="${t.launch1 ?? ''}" data-id="${t.id}" data-field="launch1">
+          <input type="number" step="0.01" min="0" value="${t.launch1 !== null && t.launch1 !== undefined ? t.launch1 : ''}" data-id="${t.id}" data-field="launch1">
         </div>
         <div class="rw-a-field">
           <label>L2 (m)</label>
-          <input type="number" step="0.01" min="0" value="${t.launch2 ?? ''}" data-id="${t.id}" data-field="launch2">
+          <input type="number" step="0.01" min="0" value="${t.launch2 !== null && t.launch2 !== undefined ? t.launch2 : ''}" data-id="${t.id}" data-field="launch2">
         </div>
         <div class="rw-a-btns">
-          <button class="rw-a-save" data-id="${t.id}">💾 Simpan</button>
-          <button class="rw-a-del" data-id="${t.id}">🗑️</button>
+          <button type="button" class="rw-a-save" data-id="${t.id}">💾 Simpan</button>
+          <button type="button" class="rw-a-del" data-id="${t.id}">🗑️</button>
         </div>
       `;
-      listEl.appendChild(row);
+      adminListEl.appendChild(row);
     });
 
-    listEl.querySelectorAll('.rw-a-save').forEach(btn => {
+    // Menggunakan pencarian dokumen absolut untuk keamanan query data
+    adminListEl.querySelectorAll('.rw-a-save').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.id;
-        const l1 = listEl.querySelector(`input[data-id="${id}"][data-field="launch1"]`).value;
-        const l2 = listEl.querySelector(`input[data-id="${id}"][data-field="launch2"]`).value;
+        const input1 = document.querySelector(`#rwAdminList input[data-id="${id}"][data-field="launch1"]`);
+        const input2 = document.querySelector(`#rwAdminList input[data-id="${id}"][data-field="launch2"]`);
+        
+        const l1 = input1 ? input1.value : '';
+        const l2 = input2 ? input2.value : '';
+        
         const team = teams.find(x => x.id === id);
         if (team) {
           team.launch1 = l1 === '' ? null : parseFloat(l1);
@@ -560,7 +571,7 @@
       });
     });
 
-    listEl.querySelectorAll('.rw-a-del').forEach(btn => {
+    adminListEl.querySelectorAll('.rw-a-del').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.id;
         const team = teams.find(x => x.id === id);
@@ -613,20 +624,23 @@
 
   el('rwAddBtn').addEventListener('click', () => {
     const nameInput = el('rwNewName');
+    if (!nameInput) return;
     const name = nameInput.value.trim();
     if (!name) { toast('⚠️ Nama tim tidak boleh kosong'); return; }
-    teams.push({ id: 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7), name, launch1: null, launch2: null });
+    
+    const newId = 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+    teams.push({ id: newId, name, launch1: null, launch2: null });
     nameInput.value = '';
     saveTeams();
     render();
     toast('🎉 Tim baru ditambahkan!');
   });
 
-  // KUNCI UTAMA SINKRONISASI LINTAS TAB INSTAN (0 MILIDETIK)
   window.addEventListener('storage', (e) => {
     if (e.key === STORAGE_KEY) {
       try {
-        teams = e.newValue ? JSON.parse(e.newValue) : [];
+        const parsed = e.newValue ? JSON.parse(e.newValue) : [];
+        teams = Array.isArray(parsed) ? parsed : [];
         render();
       } catch(err) {}
     }

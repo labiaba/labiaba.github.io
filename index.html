@@ -263,7 +263,6 @@
 .rw-modal input:focus { border-color: var(--sky-mid); }
 .rw-modal-error { color: #E4572E; font-size: 12px; font-weight: 700; min-height: 16px; margin-bottom: 6px; }
 .rw-modal-btns { display: flex; gap: 8px; margin-top: 6px; }
-
 .rw-btn {
   font-family: 'Baloo 2', sans-serif; font-weight: 700; border: none;
   border-radius: 12px; padding: 11px 16px; cursor: pointer; font-size: 14px;
@@ -377,31 +376,12 @@
 
 <div class="rw-toast" id="rwToast"></div>
 
-<!-- Import SDK Firebase Kuno agar langsung berjalan lewat Script Tag HTML sederhana -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 (function(){
+  const STORAGE_KEY = 'roket-air-teams-v2';
   const ADMIN_PASSWORD = 'labiaba';
   let teams = [];
   let isAdmin = false;
-
-  // ⚠️ ATUR DATABASE KAMU DI SINI:
-  // Kamu hanya perlu mendaftar ke firebase console (gratis), buat project, lalu salin config-nya ke sini.
-  const firebaseConfig = {
-    apiKey: "CONTOH_API_KEY_KAMU",
-    authDomain: "roket-air-project.firebaseapp.com",
-    databaseURL: "https://roket-air-project-default-rtdb.firebaseio.com", // ganti dengan URL database-mu
-    projectId: "roket-air-project",
-    storageBucket: "roket-air-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:1234:web:abcd"
-  };
-  
-  // Inisialisasi Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database().ref('roket_teams');
 
   const el = (id) => document.getElementById(id);
 
@@ -435,18 +415,24 @@
     </svg>`;
   }
 
-  // MENDENGARKAN REALTIME UPDATE DARI DATABASE ONLINE (SINKRON SEKETIKA!)
-  db.on('value', (snapshot) => {
-    const data = snapshot.val();
-    teams = [];
-    if (data) {
-      // Mengubah format objek Firebase menjadi array biasa
-      Object.keys(data).forEach(id => {
-        teams.push({ id, ...data[id] });
-      });
+  // Menggunakan localStorage web standar (bukan window.storage)
+  function loadTeams(){
+    try {
+      const res = localStorage.getItem(STORAGE_KEY);
+      teams = res ? JSON.parse(res) : [];
+    } catch(e) {
+      teams = [];
     }
     render();
-  });
+  }
+
+  function saveTeams(){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
+    } catch(e) {
+      toast('⚠️ Gagal menyimpan data');
+    }
+  }
 
   function getRanked(){
     const withScore = teams
@@ -537,7 +523,6 @@
     panel.style.display = 'block';
     const listEl = el('rwAdminList');
     listEl.innerHTML = '';
-    
     teams.forEach((t) => {
       const row = document.createElement('div');
       row.className = 'rw-admin-row';
@@ -564,16 +549,14 @@
         const id = btn.dataset.id;
         const l1 = listEl.querySelector(`input[data-id="${id}"][data-field="launch1"]`).value;
         const l2 = listEl.querySelector(`input[data-id="${id}"][data-field="launch2"]`).value;
-        
-        // Simpan langsung ke server Firebase
-        db.child(id).update({
-          launch1: l1 === '' ? null : parseFloat(l1),
-          launch2: l2 === '' ? null : parseFloat(l2)
-        }).then(() => {
-          toast('✅ Skor berhasil di-update ke Cloud!');
-        }).catch(() => {
-          toast('⚠️ Gagal mengirim ke database online');
-        });
+        const team = teams.find(x => x.id === id);
+        if (team) {
+          team.launch1 = l1 === '' ? null : parseFloat(l1);
+          team.launch2 = l2 === '' ? null : parseFloat(l2);
+          saveTeams();
+          render();
+          toast('✅ Skor tersimpan!');
+        }
       });
     });
 
@@ -583,11 +566,10 @@
         const team = teams.find(x => x.id === id);
         if (!team) return;
         if (!confirm(`Hapus tim "${team.name}"?`)) return;
-        
-        // Hapus dari Firebase
-        db.child(id).remove().then(() => {
-          toast('🗑️ Tim dihapus dari cloud');
-        });
+        teams = teams.filter(x => x.id !== id);
+        saveTeams();
+        render();
+        toast('🗑️ Tim dihapus');
       });
     });
   }
@@ -619,9 +601,9 @@
       el('rwLoginBtn').textContent = '✅ Panitia Aktif';
       el('rwLoginBtn').classList.add('active');
       render();
-      toast('🚀 Mode admin aktif!');
+      toast('🚀 Login berhasil!');
     } else {
-      el('rwPassError').textContent = 'Password salah, coba lagi.';
+      el('rwPassError').textContent = 'Password salah.';
     }
   }
 
@@ -633,17 +615,23 @@
     const nameInput = el('rwNewName');
     const name = nameInput.value.trim();
     if (!name) { toast('⚠️ Nama tim tidak boleh kosong'); return; }
-    
-    // Push data tim baru langsung ke Firebase Cloud
-    db.push({
-      name: name,
-      launch1: null,
-      launch2: null
-    }).then(() => {
-      nameInput.value = '';
-      toast('🎉 Tim baru berhasil disimpan online!');
-    });
+    teams.push({ id: 't_' + Date.now() + '_' + Math.random().toString(36).slice(2,7), name, launch1: null, launch2: null });
+    nameInput.value = '';
+    saveTeams();
+    render();
+    toast('🎉 Tim baru ditambahkan!');
   });
 
+  // KUNCI UTAMA SINKRONISASI LINTAS TAB INSTAN (0 MILIDETIK)
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY) {
+      try {
+        teams = e.newValue ? JSON.parse(e.newValue) : [];
+        render();
+      } catch(err) {}
+    }
+  });
+
+  loadTeams();
 })();
 </script>
